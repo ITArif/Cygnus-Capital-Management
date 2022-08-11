@@ -25,22 +25,22 @@
               </li>
               <li class="nav-item">
                 <a href="{{route('market_data_events')}}" class="nav-link">
-                Events <span class="float-right badge bg-info">5</span>
+                Events <span class="float-right badge bg-info">{{$total_events_data}}</span>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
-                Category <span class="float-right badge bg-success">12</span>
+                <a href="{{route('market_category')}}" class="nav-link { request()->is('market_category') ? 'active' : '' }}">
+                Category <span class="float-right badge bg-success">{{$total_category_data}}</span>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
-                Industry Data <span class="float-right badge bg-danger">842</span>
+                <a href="{{route('industry_data')}}" class="nav-link {{ request()->is('industry_data') ? 'active' : '' }}">
+                Industry Data <span class="float-right badge bg-danger">{{$total_industry_data}}</span>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
-                Company Data <span class="float-right badge bg-danger">842</span>
+                <a href="{{route('company_data')}}" class="nav-link {{ request()->is('company_data') ? 'active' : '' }}">
+                Company Data <span class="float-right badge bg-danger">{{$total_industryData}}</span>
                 </a>
               </li>
             </ul>
@@ -52,10 +52,10 @@
           @csrf
           <div class="row">
             <div class="col-5">
-               <input type="text" id="from_date" class="form-control my_datepicker" autocomplete="off" name="from_date" placeholder="From Date">
+               <input type="text" id="from_date" class="form-control my_datepicker" autocomplete="off" name="from_date" placeholder="From Date" required>
             </div>
             <div class="col-5">
-              <input type="text" id="to_date" class="form-control my_datepicker" autocomplete="off" name="to_date" placeholder="To Date">
+              <input type="text" id="to_date" class="form-control my_datepicker" autocomplete="off" name="to_date" placeholder="To Date" required>
             </div>
             <button type="submit" class="btn btn-info">Submit</button>
           </div><br/>

@@ -276,20 +276,15 @@ class AdminController extends Controller
 
     public function edit_market_data_events(Request $request, $id) {
         $data = [];
-        $data['val'] = Event::where('id', $id)->first();
-        $action = Input::get('submit');
-
+        $events = Event::where('id', $id)->first();
+        //$action = Input::get('submit');
+        $total_news_data= MAN::count();
+        $total_events_data= Event::count();
+        $total_category_data= Category::count();
+        $total_industry_data= Industry::count();
+        $total_industryData= IndustryData::count();
+        $action = $request->submit;
         if($action == "Save change") {
-            $this->validate($request, [
-                // 'upload_file'   => 'required',
-                'category'  => 'required',
-                'trading_code'   => 'required',
-                'year_end'   => 'required',
-                'divident_in'  => 'required',
-                'vanue'   => 'required',
-                'time'  => 'required',
-            ]);
-
             $board_of_director = Event::find($id);
             $board_of_director->category = $request->category;
             $board_of_director->trading_code = $request->trading_code;
@@ -299,11 +294,10 @@ class AdminController extends Controller
             $board_of_director->time = $request->time;
             $board_of_director->save();
 
-
-            return redirect('market_data_events')->with('flash_msg', 'Data updated successfully');
+            return redirect('market_data_events')->with('success', 'Data updated successfully');
         }
 
-        return view('admin.edit_market_data_events', $data);
+        return view('admin.edit_market_data_events', compact('events','total_news_data','total_events_data','total_industry_data','total_industryData'));
     }
 
     // public function product_and_service(Request $request) {
@@ -992,6 +986,10 @@ class AdminController extends Controller
         $to_date = date('Y-m-d 23:59:59', strtotime($request->to_date));
         $news_data= MAN::limit(100)->orderBy('MAN_ANNOUNCEMENT_DATE_TIME', 'desc')->get();
         $total_news_data= MAN::count();
+        $total_category_data= Category::count();
+        $total_industry_data= Industry::count();
+        $total_events_data= Event::count();
+        $total_industryData=IndustryData::count();
         //dd($total_news_data);
 
         if ($request->isMethod('post')) {
@@ -1002,11 +1000,11 @@ class AdminController extends Controller
                     ->limit(100)
                     ->get();
                 //dd($news_data);
-                return view('admin.market_data_news', compact('news_data','total_news_data'));
+                return view('admin.market_data_news', compact('news_data','total_news_data','total_category_data','total_industry_data','total_events_data','total_industryData'));
             }
         }
 
-        return view('admin.market_data_news', compact('news_data','total_news_data'));
+        return view('admin.market_data_news', compact('news_data','total_news_data','total_category_data','total_industry_data','total_events_data','total_industryData'));
     }
 
     public function edit_market_category(Request $request) {
@@ -1024,65 +1022,69 @@ class AdminController extends Controller
     }
 
     public function market_category(Request $request) {
-
+        $data = [];
+        $get_record = Category::all();
+        $total_news_data= MAN::count();
+        $total_events_data= Event::count();
+        $total_category_data= Category::count();
+        $total_industry_data= Industry::count();
+        $total_industryData=IndustryData::count();
         if($request->ajax()) {
-
             $category = new Category;
             $category->category_name = $request->category_name;
             $category->mature_share_duration = $request->mature_share_duration;
             $category->save();
-
-            echo "Category inserted successfully";
-            return;
-
+            return redirect('market_category')->with('success', 'Category inserted successfully');
         }
-
-        $data = [];
-        $data['get_record'] = Category::all();
-        return view('admin.market_category', $data);
+        return view('admin.market_category', compact('get_record','total_news_data','total_events_data','total_category_data','total_industry_data','total_industryData'));
     }
 
     public function delete_market_category($id) {
-        $id = $id;
-        Category::where('id', $id)->delete();
-        return redirect('market_category')->with('flash_msg', 'Category deleted successfully');
-    }
-
-    public function edit_industry_data(Request $request) {
-        if($request->ajax()) {
-
-            $industry = Industry::find($request->edit_id);
-            $industry->industry_name = $request->industry_name;
-            $industry->save();
-
-            echo "Industry data updated successfully";
-            return;
-
+        // $id = $id;
+        // Category::where('id', $id)->delete();
+        // return redirect('market_category')->with('flash_msg', 'Category deleted successfully');
+        $categories=Category::find($id);
+        if ($categories){
+            $categories->delete();
+            return response()->json('success',201);
+        }else{
+            return response()->json('error',422);
         }
     }
 
-    public function industry_data(Request $request) {
+    public function edit_industry_data(Request $request,$id) {
+        $industry = Industry::find($id);
+        $industry->industry_name = $request->industry_name;
+        $industry->save();
+        return redirect()->back()->with('success', 'Industry data updated successfully');
+    }
 
-        if($request->ajax()) {
-
-            $category = new Industry;
-            $category->industry_name = $request->industry_name;
-            $category->save();
-
-            echo "Industry data inserted successfully";
-            return;
-
-        }
-
+    public function industry_data() {
         $data = [];
-        $data['get_record'] = Industry::all();
-        return view('admin.industry_data', $data);
+        $get_record = Industry::all();
+        $total_news_data= MAN::count();
+        $total_events_data= Event::count();
+        $total_category_data= Category::count();
+        $total_industry_data= Industry::count();
+        $total_industryData=IndustryData::count();
+        return view('admin.industry_data', compact('total_news_data','total_events_data','total_category_data','get_record','total_industry_data','total_industryData'));
+    }
+
+    public function create_industry_data(Request $request){
+        $industry = new Industry;
+        $industry->industry_name = $request->industry_name;
+        $industry->save();
+        return redirect()->back()->with('success', 'Industry data inserted successfully');
     }
 
     public function delete_industry_data($id) {
-        $id = $id;
-        Industry::where('id', $id)->delete();
-        return redirect('industry_data')->with('flash_msg', 'Industry deleted successfully');
+        $industryes=Industry::find($id);
+        if ($industryes){
+            $industryes->delete();
+            return response()->json('success',201);
+        }else{
+            return response()->json('error',422);
+        }
     }
 
     public function edit_company_data(Request $request) {
@@ -1111,34 +1113,39 @@ class AdminController extends Controller
 
     }
 
-    public function company_data(Request $request) {
-
-        if($request->ajax()) {
-
-            $industry = new IndustryData;
-            $industry->industry_name = $request->industry_name;
-            $industry->company_code = $request->company_code;
-            $industry->company_name = $request->company_name;
-            $industry->category = $request->category;
-            $industry->status = 1;
-            $industry->save();
-
-            echo "Company data inserted successfully";
-            return;
-
-        }
-
+    public function company_data() {
         $data = [];
-        $data['get_record'] = IndustryData::all();
-        $data['cat_data'] = Category::all();
-        $data['ind_data'] = Industry::all();
-        return view('admin.company_data', $data);
+        $get_record = IndustryData::all();
+        $cat_data = Category::all();
+        $ind_data = Industry::all();
+        $total_news_data= MAN::count();
+        $total_events_data= Event::count();
+        $total_category_data= Category::count();
+        $total_industry_data= Industry::count();
+        $total_industryData= IndustryData::count();
+        dd($get_record);
+        return view('admin.company_data', compact('total_news_data','total_events_data','total_category_data','total_industry_data','total_industryData','get_record','cat_data','ind_data'));
+    }
+
+    public function create_company_data(Request $request){
+        $industry = new IndustryData;
+        $industry->INDUSTRY_NAME = $request->industry_name;
+        $industry->COMPANY_CODE = $request->company_code;
+        $industry->COMPANY_NAME = $request->company_name;
+        $industry->CATEGORY = $request->category;
+        $industry->STATUS = 1;
+        $industry->save();
+        return redirect()->back()->with('success', 'Company data inserted successfully');
     }
 
     public function delete_company_data($id) {
-        $id = $id;
-        IndustryData::where('id', $id)->delete();
-        return redirect('company_data')->with('flash_msg', 'Company deleted successfully');
+        $industryDataAll=IndustryData::find($id);
+        if ($industryDataAll){
+            $industryDataAll->delete();
+            return response()->json('success',201);
+        }else{
+            return response()->json('error',422);
+        }
     }
 
     public function add_news_data(Request $request) {
@@ -1189,9 +1196,12 @@ class AdminController extends Controller
     public function market_data_events() {
         $total_events_data= Event::count();
         $total_news_data= MAN::count();
+        $total_category_data= Category::count();
+        $total_industry_data= Industry::count();
+        $total_industryData= IndustryData::count();
         $data = [];
         $events = Event::all();
-        return view('admin.market_data_events',compact('events','total_events_data','total_news_data'));
+        return view('admin.market_data_events',compact('events','total_events_data','total_news_data','total_category_data','total_industry_data','total_industryData'));
     }
 
     public function create_market_data_events(Request $request) {

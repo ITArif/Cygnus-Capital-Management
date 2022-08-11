@@ -23,24 +23,24 @@
                 News <span class="float-right badge bg-warning">{{$total_news_data}}</span>
                </a>
               </li>
-              <li class="nav-item">
-                <a href="{{route('market_data_events')}}" class="nav-link">
+              <li class="nav-item has-treeview">
+                <a href="{{route('market_data_events')}}" class="nav-link {{ request()->is('market_data_events') ? 'active' : '' }}">
                 Events <span class="float-right badge bg-info">{{$total_events_data}}</span>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
-                Category <span class="float-right badge bg-success">12</span>
+                <a href="{{route('market_category')}}" class="nav-link { request()->is('market_category') ? 'active' : '' }}">
+                Category <span class="float-right badge bg-success">{{$total_category_data}}</span>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
-                Industry Data <span class="float-right badge bg-danger">842</span>
+                <a href="{{route('industry_data')}}" class="nav-link {{ request()->is('industry_data') ? 'active' : '' }}">
+                Industry Data <span class="float-right badge bg-danger">{{$total_industry_data}}</span>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
-                Company Data <span class="float-right badge bg-danger">842</span>
+                <a href="{{route('company_data')}}" class="nav-link {{ request()->is('company_data') ? 'active' : '' }}">
+                Company Data <span class="float-right badge bg-danger">{{$total_industryData}}</span>
                 </a>
               </li>
             </ul>
@@ -81,7 +81,7 @@
                     <td>{{ $event->vanue }}</td>
                     <td>{{ $event->time }}</td>
                     <td>
-                      <a class="btn btn-success btn-xs edit-user" data-edit_id="{{ $event->id }}"><i class="fas fa-edit"></i></a>
+                      <a class="btn btn-success btn-xs edit-user" data-edit_id="{{ $event->id }}" href="{{route('edit_market_data_events',$event->id)}}"><i class="fas fa-edit"></i></a>
                       <button id="{{$event->id}}" class="btn btn-danger btn-xs deleteEvents"><i class="far fa-trash-alt"></i></button>
                     </td>
                   </tr>
@@ -100,7 +100,7 @@
                           <div class="col-sm-6">
                             <div class="form-group">
                               <label>Category Name</label>
-                              <select name="category" id="category" class="form-control" required>
+                              <select name="category" id="category" class="form-control select2bs4" required>
                                 <option value="AGM">AGM</option>
                                 <option value="EGM">EGM</option>
                                 <option value="Record Date Divident">Record Date Divident</option>
@@ -175,7 +175,10 @@
       changeMonth: true,
       changeYear: true
     });
-  } );
+    $('.select2bs4').select2({
+      theme: 'bootstrap4'
+    });
+  });
 
  $(function () {
   $(".open_event_modal").click(function () {
