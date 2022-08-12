@@ -77,8 +77,8 @@
                     <td>{{ $data->COMPANY_NAME }}</td>
                     <td>{{ $data->CATEGORY }}</td>
                     <td>
-                      <button id="{{$data->id}}" data-target=".edit_company_modal"data-toggle="modal" data-company="{{$data->id}}" data-industry_name="{{$data->INDUSTRY_NAME }}" data-company-code="{{$data->COMPANY_CODE }}" data-company-name="{{$data->COMPANY_NAME }}" data-category="{{ $data->CATEGORY  }}" class="btn btn-info btn-xs edit_company"><i class="fa fa-edit"></i></button>
-                      <button id="{{$data->id}}" class="btn btn-danger btn-xs deleteCompanyData"><i class="far fa-trash-alt"></i></button>
+                      <button id="{{$data->ID}}" data-target=".edit_company_modal"data-toggle="modal" data-company="{{$data->id}}" data-industry_name="{{$data->INDUSTRY_NAME }}" data-company_code="{{$data->COMPANY_CODE }}" data-company_name="{{$data->COMPANY_NAME }}" data-category="{{ $data->CATEGORY  }}" class="btn btn-info btn-xs edit_company"><i class="fa fa-edit"></i></button>
+                      <button id="{{$data->ID}}" class="btn btn-danger btn-xs deleteCompanyData"><i class="far fa-trash-alt"></i></button>
                     </td>
                   </tr>
                 @endforeach
@@ -140,8 +140,62 @@
             </div>
             <!-- /end Add user.modal -->
 
-            <!-- Edit user modal -->
-            
+            <!-- Edit Company Data modal -->
+            <div class="modal fade edit_company_modal" id="modal-edit-company">
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content">                    
+                  <div class="modal-body">
+                    <div class="col-md-12">
+                      <form id="edit_company_form" data-parsley-validate=""  method="post">
+                        @csrf
+                      <div class="row">
+                          <div class="col-sm-6">
+                            <div class="form-group">
+                              <label>Industry Name</label>
+                              <select class="form-control select2bs4" id="edit_industry_name" name="industry_name">
+                                <option value="">--select industry name--</option>
+                                @foreach($get_record as $industryData)
+                                  <option value="{{$industryData->INDUSTRY_NAME}}">{{ $industryData->INDUSTRY_NAME}}</option>
+                                @endforeach
+                              </select>
+                            </div>
+                          </div>
+                          <div class="col-sm-6">
+                            <div class="form-group">
+                              <label>Category Name</label>
+                              <select class="form-control select2bs4" id="edit_category" name="category">
+                                <option value="">--select category name--</option>
+                                @foreach($get_record as $category)
+                                  <option value="{{ $category->CATEGORY}}">{{ $category->CATEGORY}}</option>
+                                @endforeach
+                              </select>
+                            </div>
+                          </div>
+                          <div class="col-sm-6">
+                            <div class="form-group">
+                              <label>Company Code</label>
+                              <input type="text" class="form-control" id="edit_company_code" name="company_code" value="{{ $industryData->COMPANY_CODE}}"> 
+                            </div>
+                          </div>
+                          <div class="col-sm-6">
+                            <div class="form-group">
+                              <label>Company Name</label>
+                              <input type="text" class="form-control" id="edit_company_name" name="company_name" value="{{ $industryData->COMPANY_NAME}}">
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                            <button type="submit" id="save_edit_company_data" class="btn btn-success modal-save"><i class="fa fa-save"></i> Save change</button>
+                          </div>
+                      </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <!-- /.modal-content -->
+              </div>
+              <!-- /.modal-dialog -->
+            </div>
             <!-- /Edit add user modal -->
           </div>
         </div>
@@ -189,9 +243,24 @@
     });
   });
 
+  $('.edit_company').click(function () {
+      var id = $(this).attr('id');
+      //alert(id);
+      var industry_name=$(this).attr('data-industry_name');
+      var category=$(this).attr('data-category');
+      var company_code=$(this).attr('data-company_code');
+      var company_name=$(this).attr('data-company_name');
+      //$("#edit_id").val(edit_id);
+      $('#edit_industry_name').val(industry_name);
+      $('#edit_company_code').val(company_code);
+      $('#edit_category').val(category);
+      $('#edit_company_name').val(company_name);
+      $('#edit_company_form').attr('action','{{ url('edit_company_data/') }}'+'/'+id);
+  });
+
   $(".deleteCompanyData").click(function () {
       var id=$(this).attr('id');
-      alert(id);
+      //alert(id);
       var url="{{url('delete_company_data')}}";
       $.ajax({
           url:url+"/"+id,

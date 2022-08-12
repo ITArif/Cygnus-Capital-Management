@@ -398,14 +398,22 @@ class AdminController extends Controller
 
     public function manage_group_account(Request $request) {
         $data = [];
-        $data['get_record'] = Group::all();
-        return view('admin.group.manage_group_account', $data);
+        $get_record = Group::all();
+        $total_group_data=Group::count();
+        return view('admin.group.manage_group_account', compact('get_record','total_group_data'));
     }
 
     public function delete_group_account($id) {
-        $id = $id;
-        Group::where('id', $id)->delete();
-        return redirect('manage_group_account')->with('flash_msg', 'Group deleted successfully');
+        $groups=Group::find($id);
+        if ($groups){
+            $groups->delete();
+            return response()->json('success',201);
+        }else{
+            return response()->json('error',422);
+        }
+        // $id = $id;
+        // Group::where('id', $id)->delete();
+        // return redirect('manage_group_account')->with('flash_msg', 'Group deleted successfully');
     }
 
     public function create_group_account(Request $request) {
@@ -1087,30 +1095,15 @@ class AdminController extends Controller
         }
     }
 
-    public function edit_company_data(Request $request) {
-        if($request->ajax()) {
-            /*$industry = IndustryData::find($request->edit_id);
+    public function edit_company_data(Request $request,$id) {
+            $industry = IndustryData::find($id);
             $industry->INDUSTRY_NAME = $request->industry_name;
             $industry->COMPANY_CODE = $request->company_code;
             $industry->COMPANY_NAME = $request->company_name;
             $industry->CATEGORY = $request->category;
-            $industry->save();*/
-
-
-            DB::table('INDUSTRY_DATA')
-                    ->where('ID', $request->edit_id)
-                    ->update(array(
-                        'INDUSTRY_NAME' => $request->industry_name,
-                        'COMPANY_CODE' => $request->company_code,
-                        'COMPANY_NAME' => $request->company_name,
-                        'CATEGORY' => $request->category,
-                    ));
-            echo "Company data updated successfully";
-            return;
-
-
-        }
-
+            dd($industry);
+            $industry->save();
+            return redirect()->back()->with('success', 'Company data updated successfully');
     }
 
     public function company_data() {
@@ -1123,7 +1116,7 @@ class AdminController extends Controller
         $total_category_data= Category::count();
         $total_industry_data= Industry::count();
         $total_industryData= IndustryData::count();
-        dd($get_record);
+        //dd($cat_data);
         return view('admin.company_data', compact('total_news_data','total_events_data','total_category_data','total_industry_data','total_industryData','get_record','cat_data','ind_data'));
     }
 

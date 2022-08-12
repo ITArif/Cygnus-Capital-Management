@@ -51,8 +51,8 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="#"
-                        class="nav-link">
+                    <a href="{{route('manage_group_account')}}"
+                        class="nav-link {{ request()->is('manage_group_account') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-user text-orange pull-right"></i>
                         <p>
                            Group Account  

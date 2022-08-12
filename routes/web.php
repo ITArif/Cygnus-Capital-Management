@@ -54,8 +54,15 @@ Route::middleware('admin')->group(function () {
     ////****************Company Data*********************************////
     Route::any('/company_data', [AdminController::class,'company_data'])->name('company_data');
     Route::any('/create_company_data', [AdminController::class,'create_company_data'])->name('create_company_data');
-    Route::any('edit_company_data', [AdminController::class,'edit_company_data'])->name('edit_company_data');
+    Route::any('edit_company_data/{id}', [AdminController::class,'edit_company_data'])->name('edit_company_data');
     Route::any('/delete_company_data/{id}', [AdminController::class,'delete_company_data'])->name('delete_company_data');
-/////****************End Company Data*********************************////
+   /////****************End Company Data*********************************////
+    
+    ////*******************Group Account**************************////
+    Route::any('/manage_group_account', [AdminController::class,'manage_group_account'])->name('manage_group_account');
+    Route::any('/edit_group_account/{id}', [AdminController::class,'edit_group_account'])->name('edit_group_account');
+    Route::any('/delete_group_account/{id}', [AdminController::class,'delete_group_account'])->name('delete_group_account');
+
+    ///********************End Group Account***********************////
     Route::any('/about_management_profile', [AdminController::class,'about_management_profile'])->name('about_management_profile');
 });
