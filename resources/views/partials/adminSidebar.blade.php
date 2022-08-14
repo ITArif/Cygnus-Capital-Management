@@ -60,7 +60,7 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                    <a href="{{route('circuit_breaker_data')}}" class="nav-link {{ request()->is('circuit_breaker_data') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-columns text-info"></i>
                         <p>
                             Circuit Breaker
@@ -68,7 +68,7 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                    <a href="{{route('all_stock_order')}}" class="nav-link {{ request()->is('all_stock_order') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-columns text-primary"></i>
                         <p>
                             Stock Order
@@ -76,8 +76,8 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="#"
-                        class="nav-link">
+                    <a href="{{route('stock_order_report')}}"
+                        class="nav-link {{ request()->is('stock_order_report') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-book text-success"></i>
                         <p>
                             Order Report
@@ -85,7 +85,7 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                    <a href="{{route('update_cash_limit')}}" class="nav-link {{ request()->is('update_cash_limit') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-table text-info"></i>
                         <p>
                             Update Cash Limit
@@ -93,7 +93,7 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                    <a href="{{route('all_user_withdrawal')}}" class="nav-link {{ request()->is('all_user_withdrawal') ? 'active' : '' }}">
                         <i class="nav-icon far fa-plus-square text-orange"></i>
                         <p>
                             Withdraw Request
@@ -101,8 +101,8 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="#"
-                        class="nav-link">
+                    <a href="{{route('all_user_deposit')}}"
+                        class="nav-link {{ request()->is('all_user_deposit') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-user text-orange pull-right"></i>
                         <p>
                             Deposit Request

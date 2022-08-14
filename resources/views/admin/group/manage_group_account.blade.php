@@ -24,7 +24,7 @@
                </a>
               </li>
               <li class="nav-item has-treeview">
-                <a href="#" class="nav-link">
+                <a href="{{route('create_group_account')}}" class="nav-link">
                 Create Group <span class="float-right badge bg-info"></span>
                 </a>
               </li>
@@ -39,7 +39,7 @@
               All Groups
             </h3>
             <div class="btn-group float-right">
-              <a href="#" class="btn btn-primary float-sm-right open_group_modal" data-toggle="modal" data-target=".group_modal" style="cursor: pointer"><i class="fas fa-plus"></i>ADD More</a>
+              <a href="{{route('create_group_account')}}" class="btn btn-primary float-sm-right"><i class="fas fa-plus"></i>ADD More</a>
             </div>
           </div>
           <!-- /.card-header -->
@@ -65,7 +65,7 @@
                         ?>
                       </td>
                     <td>
-                      <a class="btn btn-success btn-xs edit-groups" data-group_id="{{ $val->id }}" href="#"><i class="fas fa-edit"></i></a>
+                      <a class="btn btn-success btn-xs edit-groups" href="{{route('edit_group_account',$val->id)}}"><i class="fas fa-edit"></i></a>
                       <button id="{{$val->id}}" class="btn btn-danger btn-xs deleteGroups"><i class="far fa-trash-alt"></i></button>
                     </td>
                   </tr>

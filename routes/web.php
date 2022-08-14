@@ -59,10 +59,36 @@ Route::middleware('admin')->group(function () {
    /////****************End Company Data*********************************////
     
     ////*******************Group Account**************************////
+    Route::any('/create_group_account', [AdminController::class,'create_group_account'])->name('create_group_account');
     Route::any('/manage_group_account', [AdminController::class,'manage_group_account'])->name('manage_group_account');
     Route::any('/edit_group_account/{id}', [AdminController::class,'edit_group_account'])->name('edit_group_account');
     Route::any('/delete_group_account/{id}', [AdminController::class,'delete_group_account'])->name('delete_group_account');
-
     ///********************End Group Account***********************////
-    Route::any('/about_management_profile', [AdminController::class,'about_management_profile'])->name('about_management_profile');
+
+    ////*******************Circuit Breker****************************///////
+    Route::any('/circuit_breaker_data', [AdminController::class,'circuit_breaker_data'])->name('circuit_breaker_data');
+    Route::any('/delete_circuit_breaker_data/{id}', [AdminController::class,'delete_circuit_breaker_data'])->name('delete_circuit_breaker_data');
+    Route::any('/circuit_breaker_data_cse', [AdminController::class,'circuit_breaker_data_cse'])->name('circuit_breaker_data_cse');
+    Route::any('/delete_circuit_breaker_data_cse/{id}', [AdminController::class,'delete_circuit_breaker_data_cse'])->name('delete_circuit_breaker_data_cse');
+    ////*******************End Circuit Breker****************************///////
+
+    ////*******************Stock Order***********************************///////
+    Route::any('/all_stock_order', [AdminController::class,'all_stock_order'])->name('all_stock_order');
+    Route::any('/all_stock_order_data', [AdminController::class,'all_stock_order_data'])->name('all_stock_order_data');
+    ////*****************End Stock Order*********************************/////
+
+    ////*********************Stock Order Report*****************************/////
+    Route::any('/stock_order_report', [AdminController::class,'stock_order_report'])->name('stock_order_report');
+    ////*********************End Stock Order Report*****************************/////
+    ////**********************Update Cash Limit*********************************////
+    Route::any('/update_cash_limit', [AdminController::class,'update_cash_limit'])->name('update_cash_limit');
+    ///********************Withdraw Request***********************************////
+    Route::any('/all_user_withdrawal', [AdminController::class,'all_user_withdrawal'])->name('all_user_withdrawal');
+    Route::any('/view_withdraw_print/{id}', [AdminController::class,'view_withdraw_print'])->name('view_withdraw_print');
+    Route::any('/view_withdraw_print/{id}', [AdminController::class,'view_withdraw_print'])->name('view_withdraw_print');
+    ///********************End Withdraw Request***********************************//
+    ////*********************Deposite Request********************************/////
+    Route::any('/all_user_deposit', [AdminController::class,'all_user_deposit'])->name('all_user_deposit');
+    ////*********************End Deposite Request********************************/////
 });
+    

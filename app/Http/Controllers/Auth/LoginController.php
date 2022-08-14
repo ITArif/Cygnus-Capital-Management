@@ -36,6 +36,7 @@ class LoginController extends Controller
                     'role' =>$auth->role,
                     'image' =>$auth->image,
                     'status' =>$auth->status,
+                    'client_code' =>$auth->client_code,
                 ]);
                 //dd($auth->role);
                 if ($auth->role == 2) {

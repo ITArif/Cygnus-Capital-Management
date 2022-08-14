@@ -50,6 +50,7 @@ use Illuminate\Http\Request;
 //use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 
 class AdminController extends Controller
 {
@@ -418,10 +419,11 @@ class AdminController extends Controller
 
     public function create_group_account(Request $request) {
         $data = [];
-        $action = Input::get('submit');
+        $total_group_data=Group::count();
+        $action = $request->submit;
         // $data['get_data'] = UserBOAccountData::limit(5)->get(['bo_identification_number', 'name_of_first_holder']);
         // $data['get_data'] = UserBOAccountData::get(['bo_identification_number', 'name_of_first_holder']);
-        $data['get_data'] = DB::select("SELECT ubad.*, u.* FROM user_bo_account_data AS ubad INNER JOIN users AS u ON u.id=ubad.user_id");
+        $get_data = DB::select("SELECT ubad.*, u.* FROM user_bo_account_data AS ubad INNER JOIN users AS u ON u.id=ubad.user_id");
         // dd($data['get_data']);
 
         // dd($_POST);
@@ -440,11 +442,11 @@ class AdminController extends Controller
             $group->bo_ids = $bo_ids;
             $group->save();
 
-
-            return redirect('manage_group_account')->with('flash_msg', 'Group created successfully');
+            return redirect('manage_group_account')->with('success', 'Group created successfully');
+            //return redirect('manage_group_account')->with('flash_msg', 'Group created successfully');
         }
 
-        return view('admin.group.create_group_account', $data);
+        return view('admin.group.create_group_account', compact('get_data','total_group_data'));
     }
 
     public function edit_group_account(Request $request, $id) {
@@ -1625,20 +1627,18 @@ class AdminController extends Controller
             $order = OrderManagement::find($stock_id);
             $order->order_status = $order_status;
             $order->save();
-
-            echo "Status updated successfully, Thank you";
-            return;
+            return redirect()->back()->with('success','Status updated successfully, Thank you');
         }
 
-        $client_code = Auth::user()->client_code;
+        $client_code = session('client_code');
         $data = [];
         $from = date("Y-m-d");
         $from = $from . " 00:00:00";
         $to = date("Y-m-d");
         $to = $to . " 23:59:59";
         $bubu = date("Y-m-d");
-        $data['get_data'] = DB::select("SELECT * FROM order_management WHERE created_at BETWEEN '{$from}' AND '{$to}' ORDER BY id DESC");
-        return view('admin.all_stock_order', $data);
+        $get_data = DB::select("SELECT * FROM order_management WHERE created_at BETWEEN '{$from}' AND '{$to}' ORDER BY id DESC");
+        return view('admin.all_stock_order', compact('get_data'));
     }
 
     public function all_stock_order_data() {
@@ -1755,38 +1755,52 @@ class AdminController extends Controller
             $order = OrderManagement::find($stock_id);
             $order->order_status = $order_status;
             $order->save();
-
-            echo "Status updated successfully, Thank you";
-            return;
+            return redirect()->back()->with('success','Status updated successfully, Thank you');
         }
 
 
-        $action = Input::get('submit');
+        $action = $request->submit;
         if($action == "Submit") {
             $from = date("Y-m-d 00:00:00", strtotime($request->from_date));
             $to = date("Y-m-d 23:59:59", strtotime($request->to_date));
 
             Log::info("SELECT * FROM order_management WHERE created_at BETWEEN '{$from}' AND '{$to}' ORDER BY id DESC");
 
-            $data['get_data'] = DB::select("SELECT * FROM order_management WHERE created_at BETWEEN '{$from}' AND '{$to}' ORDER BY id DESC");
-            return view('admin.stock_order_report', $data);
+            $get_data = DB::table('order_management')
+                    ->leftJoin('users', 'order_management.user_id', '=', 'users.id')
+                    ->select('order_management.*', 'users.name as user_name')
+                    ->WhereBetween('order_management.created_at', [$from, $to])
+                    ->orderBy('id','DESC')
+                    ->get();
+
+            //$get_data =DB::select("SELECT * FROM order_management WHERE created_at BETWEEN '{$from}' AND '{$to}' ORDER BY id DESC");
+            return view('admin.stock_order_report', compact('get_data'));
         }
 
 
-        $client_code = Auth::user()->client_code;
+        $client_code = session('client_code');
         $data = [];
         $from = date("Y-m-d");
         $from = $from . " 00:00:00";
         $to = date("Y-m-d");
         $to = $to . " 23:59:59";
         $bubu = date("Y-m-d");
-        $data['get_data'] = DB::select("SELECT * FROM order_management WHERE created_at BETWEEN '{$from}' AND '{$to}' ORDER BY id DESC");
-        return view('admin.stock_order_report', $data);
+        //$get_data =DB::select("SELECT * FROM order_management WHERE created_at BETWEEN '{$from}' AND '{$to}' ORDER BY id DESC");
+        $get_data = $get_data = DB::table('order_management')
+                    ->leftJoin('users', 'order_management.user_id', '=', 'users.id')
+                    ->select('order_management.*', 'users.name as user_name')
+                    ->WhereBetween('order_management.created_at', [$from, $to])
+                    ->orderBy('id','DESC')
+                    ->get();
+        return view('admin.stock_order_report', compact('get_data'));
     }
     // -- end stock order
 
     public function circuit_breaker_data(Request $request) {
-
+        $data = [];
+        $dse_data = CircuitBreaker::where('breaker_type', 'dse')->get();
+        $total_dse_data=CircuitBreaker::where('breaker_type', 'dse')->count();
+        $total_cse_data=CircuitBreaker::where('breaker_type', 'cse')->count();
         if($request->ajax()) {
 
             if($request->page_type == "edit_user_get") {
@@ -1801,10 +1815,7 @@ class AdminController extends Controller
                 $dse->range_end = $request->range_end;
                 $dse->breaker_value = $request->breaker_value;
                 $dse->save();
-
-                echo "Circuit Breaker created successfully";
-                return;
-
+                return redirect('circuit_breaker_data')->with('success', 'Circuit Breaker created successfully');
             }
             else if($request->page_type == "edit") {
                 $dse = CircuitBreaker::find($request->edit_id);
@@ -1813,28 +1824,27 @@ class AdminController extends Controller
                 $dse->range_end = $request->range_end;
                 $dse->breaker_value = $request->breaker_value;
                 $dse->save();
-
-                echo "Circuit Breaker updated successfully";
-                return;
-
+                return redirect('circuit_breaker_data')->with('success', 'Circuit Breaker updated successfully');
             }
         }
-
-        $data = [];
-        $data['dse_data'] = CircuitBreaker::where('breaker_type', 'dse')->get();
-        return view('admin.circuit_breaker_data', $data);
+        return view('admin.circuit_breaker_data', compact('dse_data','total_dse_data','total_cse_data'));
     }
 
     public function delete_circuit_breaker_data($id) {
-
-        $id = $id;
-        CircuitBreaker::where('id', $id)->delete();
-        return redirect('circuit_breaker_data')->with('flash_msg', 'Data deleted successfully');
-
+        $circuitData=CircuitBreaker::find($id);
+        if ($circuitData){
+            $circuitData->delete();
+            return response()->json('success',201);
+        }else{
+            return response()->json('error',422);
+        }
     }
 
     public function circuit_breaker_data_cse(Request $request) {
-
+        $data = [];
+        $cse_data= CircuitBreaker::where('breaker_type', 'cse')->get();
+        $total_dse_data=CircuitBreaker::where('breaker_type', 'dse')->count();
+        $total_cse_data=CircuitBreaker::where('breaker_type', 'cse')->count();
         if($request->ajax()) {
 
             if($request->page_type == "edit_user_get") {
@@ -1849,10 +1859,7 @@ class AdminController extends Controller
                 $dse->range_end = $request->range_end;
                 $dse->breaker_value = $request->breaker_value;
                 $dse->save();
-
-                echo "Circuit Breaker created successfully";
-                return;
-
+                return redirect('circuit_breaker_data_cse')->with('success', 'Circuit Breaker created successfully');
             }
             else if($request->page_type == "edit") {
                 $dse = CircuitBreaker::find($request->edit_id);
@@ -1861,16 +1868,10 @@ class AdminController extends Controller
                 $dse->range_end = $request->range_end;
                 $dse->breaker_value = $request->breaker_value;
                 $dse->save();
-
-                echo "Circuit Breaker updated successfully";
-                return;
-
+                return redirect('circuit_breaker_data_cse')->with('success', 'Circuit Breaker updated successfully');
             }
         }
-
-        $data = [];
-        $data['cse_data'] = CircuitBreaker::where('breaker_type', 'cse')->get();
-        return view('admin.circuit_breaker_data_cse', $data);
+        return view('admin.circuit_breaker_data_cse', compact('cse_data','total_dse_data','total_cse_data'));
     }
 
     public function delete_circuit_breaker_data_cse($id) {
@@ -2559,20 +2560,18 @@ class AdminController extends Controller
             $order = WithdrawRequest::find($withdraw_id);
             $order->status = $status;
             $order->save();
-
-            echo "Status updated successfully, Thank you";
-            return;
+            return redirect()->back()->with('success','Status updated successfully, Thank you');
         }
 
-       $action = Input::get('submit');
+       $action = $request->submit;
         if($action == "Submit") {
             $from = date("Y-m-d 00:00:00", strtotime($request->from_date));
             $to = date("Y-m-d 23:59:59", strtotime($request->to_date));
 
             Log::info("SELECT * FROM order_management WHERE created_at BETWEEN '{$from}' AND '{$to}' ORDER BY id DESC");
 
-        $data['get_data'] = DB::select("SELECT * FROM withdraw_request WHERE created_at BETWEEN '{$from}' AND '{$to}' ORDER BY id DESC");
-        return view('admin/all_user_withdrawal', $data);
+        $get_data = DB::select("SELECT * FROM withdraw_request WHERE created_at BETWEEN '{$from}' AND '{$to}' ORDER BY id DESC");
+        return view('admin.all_user_withdrawal', compact('get_data'));
         }
         $from = date("Y-m-d");
         $from = $from . " 00:00:00";
@@ -2580,8 +2579,8 @@ class AdminController extends Controller
         $to = $to . " 23:59:59";
         // $data['get_data'] = DB::select("SELECT * FROM withdraw_request WHERE created_at BETWEEN '{$from}' AND '{$to}' ORDER BY id DESC");
 
-        $data['get_data'] = [];
-        return view('admin.all_user_withdrawal', $data);
+        $get_data = [];
+        return view('admin.all_user_withdrawal', compact('get_data'));
     }
 
     public function all_withdraw_req_data() {
@@ -2690,9 +2689,9 @@ class AdminController extends Controller
         // $kaka = $this->convertNumberToWord(101);
 
         $data = [];
-        $data['get_data'] = WithdrawRequest::where('id', $id)->first();
-        $data['num_in_word'] = $this->convertNumberToWord($data['get_data']->amount);
-        $client_code = $data['get_data']->client_code;
+        $get_data = WithdrawRequest::where('id', $id)->first();
+        $num_in_word = $this->convertNumberToWord($get_data->amount);
+        $client_code = $get_data->client_code;
         $ledger_balance = 0;
         $from_date = date("d M Y");
         $to_date = date("d M Y");
@@ -2705,9 +2704,9 @@ class AdminController extends Controller
             $ledger_balance = $get_data[$counting];
             $ledger_balance = $ledger_balance->Balance;
         }
-        $data['ledger_balance'] = $ledger_balance;
+        $ledger_balance = $ledger_balance;
 
-        return view('admin.view_withdraw_print', $data);
+        return view('admin.view_withdraw_print', compact('get_data','ledger_balance'));
     }
 
     public function settings(Request $request) {
@@ -2989,27 +2988,25 @@ class AdminController extends Controller
 
     public function update_cash_limit(Request $request) {
         $data = [];
-        $action = Input::get('submit');
+        $action =$request->submit;
         if($action == "Submit") {
             $security_code = $request->security_code;
             $amount = (int)$request->amount;
-            
             $client_data = ClientLimits::where('clientcode', $security_code)->first();
-            if(!count($client_data)) {
-                return redirect()->back()->with('flash_msg', 'Wrong client code');
+            if($security_code ==$client_data) {
+                return redirect()->back()->with('failed', 'Wrong client code');
             }
             if($amount < 1) {
-                return redirect()->back()->with('flash_msg', 'Correct your amount please');
+             return redirect()->back()->with('failed', 'Correct your amount please');
             }
             $prev_cash = $client_data->cash;
             $updated_cash = $prev_cash + $amount;
 
             DB::select("UPDATE client_limits SET cash={$updated_cash} WHERE clientcode='{$security_code}' LIMIT 1");
-            return redirect()->back()->with('flash_msg', "Cash limit {$amount} updated for security code {$security_code}, current limit now {$updated_cash}");
-
-            dd($updated_cash);
+            return redirect()->back()->with('success', "Cash limit {$amount} updated for security code {$security_code}, current limit now {$updated_cash}");
+            //dd($updated_cash);
         }
-        return view('admin.update_cash_limit', $data);
+        return view('admin.update_cash_limit');
     }
 
     public function download_database() {
@@ -3053,28 +3050,26 @@ class AdminController extends Controller
             $order = Deposit::find($withdraw_id);
             $order->status = $status;
             $order->save();
-
-            echo "Status updated successfully, Thank you";
-            return;
+            return redirect()->back()->with('success','Status updated successfully, Thank you');
         }
 
-       $action = Input::get('submit');
+       $action = $request->submit;
         if($action == "Submit") {
             $from = date("Y-m-d 00:00:00", strtotime($request->from_date));
             $to = date("Y-m-d 23:59:59", strtotime($request->to_date));
 
             // Log::info("SELECT * FROM order_management WHERE created_at BETWEEN '{$from}' AND '{$to}' ORDER BY id DESC");
 
-        $data['get_data'] = DB::select("SELECT * FROM deposit WHERE created_at BETWEEN '{$from}' AND '{$to}' ORDER BY id DESC");
-        return view('admin/all_user_deposit', $data);
+        $get_data = DB::select("SELECT * FROM deposit WHERE created_at BETWEEN '{$from}' AND '{$to}' ORDER BY id DESC");
+        return view('admin.all_user_deposit', compact('get_data'));
         }
         $from = date("Y-m-d");
         $from = $from . " 00:00:00";
         $to = date("Y-m-d");
         $to = $to . " 23:59:59";
-        $data['get_data'] = DB::select("SELECT * FROM deposit WHERE created_at BETWEEN '{$from}' AND '{$to}' ORDER BY id DESC");
+        $get_data = DB::select("SELECT * FROM deposit WHERE created_at BETWEEN '{$from}' AND '{$to}' ORDER BY id DESC");
         //$data['get_data'] = WithdrawRequest::all();
-        return view('admin.all_user_deposit', $data);
+        return view('admin.all_user_deposit', compact('get_data'));
     }
   /*********************(Arif khan)*****************************************/
   /*********************Upload Industry Data********************************/
