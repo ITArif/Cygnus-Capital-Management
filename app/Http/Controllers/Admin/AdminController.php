@@ -2028,22 +2028,20 @@ class AdminController extends Controller
         $to = date("Y-m-d");
         $to = $to . " 23:59:59";
         $all_data = DB::select("SELECT id, (SELECT COUNT(*) FROM users WHERE role=1) AS TOT_USER, (SELECT COUNT(*) FROM users WHERE role=1 AND user_type='Free') AS FREE_USER, (SELECT COUNT(*) FROM users WHERE role=1 AND user_type='Premium') AS PREMIUM_USER, (SELECT COUNT(*) FROM users WHERE role=0) AS ADMIN_USER FROM users LIMIT 1");
-        $data['all_data'] = $all_data[0];
+        $all_data = $all_data[0];
         // $data['get_data'] = DB::select("SELECT * FROM user_bo_account_data_demo WHERE created_at BETWEEN '{$from}' AND '{$to}'");
-        $data['get_data'] = DB::select("SELECT * FROM user_bo_account_data ORDER BY id DESC LIMIT 100");
+        $get_data = DB::select("SELECT * FROM user_bo_account_data ORDER BY id DESC");
         //dd($data['get_data']);die;
-        $data['users'] = User::where('role', 1)->get();
-        return view('admin.new_bo_account', $data);
+        $users = User::where('role', 1)->get();
+        return view('admin.new_bo_account', compact('all_data','get_data','users'));
     }
 
     public function edit_bo_account(Request $request, $id) {
 
         $data = [];
-        $data['val'] = UserBOAccountData::where('id', $id)->first();
-        $action = Input::get('submit');
-
+        $val = UserBOAccountData::where('id', $id)->first();
+        $action = $request->submit;
         if($action == "Save Account") {
-
             $bo_account = UserBOAccountData::find($id);
             $bo_account->bo_identification_number = $request->bo_identification_number;
             $bo_account->bo_type = $request->bo_type;
@@ -2096,10 +2094,10 @@ class AdminController extends Controller
             $bo_account->third_holder_national_id = $request->third_holder_national_id;
             $bo_account->save();
 
-            return redirect('manage_bo_account')->with('flash_msg', 'B.O Account Edited Successfully');
+            return redirect('manage_bo_account')->with('success', 'B.O Account Updated Successfully');
         }
 
-        return view('admin.edit_bo_account', $data);
+        return view('admin.edit_bo_account', compact('val'));
 
     }
 

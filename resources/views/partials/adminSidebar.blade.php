@@ -110,7 +110,7 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                    <a href="{{route('new_bo_account')}}" class="nav-link {{ request()->is('new_bo_account') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-table"></i>
                         <p>
                             New B.O Request

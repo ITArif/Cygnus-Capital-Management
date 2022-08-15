@@ -18,7 +18,7 @@
           <span class="info-box-icon bg-info"><i class="ion ion-person-add"></i></span>
           <div class="info-box-content">
             <span class="info-box-text">TOTAL USER</span>
-            <span class="info-box-number">150</span>
+            <span class="info-box-number">{{ $all_data->TOT_USER }}</span>
           </div>
         </div>
       </div>
@@ -28,7 +28,7 @@
           <span class="info-box-icon bg-success"><i class="ion ion-person-add"></i></span>
           <div class="info-box-content">
             <span class="info-box-text">FREE USER</span>
-            <span class="info-box-number">500</span>
+            <span class="info-box-number">{{ $all_data->FREE_USER }}</span>
           </div>
         </div>
       </div>
@@ -38,7 +38,7 @@
           <span class="info-box-icon bg-warning"><i class="ion ion-person-add"></i></span>
           <div class="info-box-content">
             <span class="info-box-text">PRIMIUM USER</span>
-            <span class="info-box-number">400</span>
+            <span class="info-box-number">{{ $all_data->PREMIUM_USER }}</span>
           </div>
         </div>
       </div>
@@ -48,7 +48,7 @@
           <span class="info-box-icon bg-danger"><i class="ion ion-person-add"></i></span>
           <div class="info-box-content">
             <span class="info-box-text">ADMIN USER</span>
-            <span class="info-box-number">200</span>
+            <span class="info-box-number">{{ $all_data->ADMIN_USER }}</span>
           </div>
         </div>
       </div>

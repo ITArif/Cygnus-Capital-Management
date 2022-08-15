@@ -90,5 +90,13 @@ Route::middleware('admin')->group(function () {
     ////*********************Deposite Request********************************/////
     Route::any('/all_user_deposit', [AdminController::class,'all_user_deposit'])->name('all_user_deposit');
     ////*********************End Deposite Request********************************/////
+
+    ////********************New Bo Account***************************************////
+    Route::any('/new_bo_account', [AdminController::class,'new_bo_account'])->name('new_bo_account');
+    Route::any('/edit_bo_account/{id}', [AdminController::class,'edit_bo_account'])->name('edit_bo_account');
+    Route::any('/delete_bo_account/{id}', [AdminController::class,'delete_bo_account'])->name('delete_bo_account');
+    Route::any('/view_bo_account/{id}', [AdminController::class,'view_bo_account'])->name('view_bo_account');
+    Route::any('/export_bo_account/{id}', [AdminController::class,'export_bo_account'])->name('export_bo_account');
+    ////********************End New Bo Account**********************************////
 });
     
