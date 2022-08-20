@@ -2030,7 +2030,7 @@ class AdminController extends Controller
         $all_data = DB::select("SELECT id, (SELECT COUNT(*) FROM users WHERE role=1) AS TOT_USER, (SELECT COUNT(*) FROM users WHERE role=1 AND user_type='Free') AS FREE_USER, (SELECT COUNT(*) FROM users WHERE role=1 AND user_type='Premium') AS PREMIUM_USER, (SELECT COUNT(*) FROM users WHERE role=0) AS ADMIN_USER FROM users LIMIT 1");
         $all_data = $all_data[0];
         // $data['get_data'] = DB::select("SELECT * FROM user_bo_account_data_demo WHERE created_at BETWEEN '{$from}' AND '{$to}'");
-        $get_data = DB::select("SELECT * FROM user_bo_account_data ORDER BY id DESC");
+        $get_data = DB::select("SELECT * FROM user_bo_account_data ORDER BY id DESC LIMIT 100");
         //dd($data['get_data']);die;
         $users = User::where('role', 1)->get();
         return view('admin.new_bo_account', compact('all_data','get_data','users'));
@@ -2097,7 +2097,7 @@ class AdminController extends Controller
             return redirect('manage_bo_account')->with('success', 'B.O Account Updated Successfully');
         }
 
-        return view('admin.edit_bo_account', compact('val'));
+        return view('admin.edit_bo_account',compact('val'));
 
     }
 
@@ -2136,7 +2136,7 @@ class AdminController extends Controller
     public function delete_bo_account($id) {
         $id = $id;
         UserBOAccountData::where('id', $id)->delete();
-        return redirect('manage_bo_account')->with('flash_msg', 'Account deleted successfully');
+        return redirect('manage_bo_account')->with('success', 'Account deleted successfully');
     }
 
     public function upload_bo_account(Request $request) {
