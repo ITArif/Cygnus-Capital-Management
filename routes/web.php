@@ -98,5 +98,16 @@ Route::middleware('admin')->group(function () {
     Route::any('/view_bo_account/{id}', [AdminController::class,'view_bo_account'])->name('view_bo_account');
     Route::any('/export_bo_account/{id}', [AdminController::class,'export_bo_account'])->name('export_bo_account');
     ////********************End New Bo Account**********************************////
+
+    ////*********************** ipo for Admin ****************************///////
+    Route::get('/IPO', [AdminController::class,'IPO'])->name('IPO');
+    Route::get('/ipo_setting',[AdminController::class,'ipo_setting'])->name('ipo_setting');
+    Route::post('/save_ipo_data',[AdminController::class,'saveIpoData'])->name('save_ipo_data');
+    Route::any('/ipo_status_change/{id}',[AdminController::class,'ipoStatusChange']);
+
+    Route::any('/ipo_application',[AdminController::class,'ipo_application'])->name('ipo_application');
+    Route::POST('/save_change_ipo_status',[AdminController::class,'save_change_ipo_status'])->name('save_change_ipo_status');
+
+/********************************************************************/
 });
     

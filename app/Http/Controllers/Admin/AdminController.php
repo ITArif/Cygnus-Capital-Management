@@ -3181,9 +3181,9 @@ class AdminController extends Controller
         ->update(['status' => $data->status]);
 
      if($updated_data){
-        return redirect('/IPO')->with('flash_msg', 'Status change successfully.');
+        return redirect('/IPO')->with('success', 'Status change successfully.');
      }
-     return redirect('/IPO')->with('flash_msg', 'Please try again,Status change unsuccessfull.');
+     return redirect('/IPO')->with('success', 'Please try again,Status change unsuccessfull.');
   }
 
   public function ipo_application(Request $request)

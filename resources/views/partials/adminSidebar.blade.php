@@ -118,7 +118,7 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                    <a href="{{route('IPO')}}" class="nav-link {{ request()->is('IPO') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-table"></i>
                         <p>
                             IPO Settings
