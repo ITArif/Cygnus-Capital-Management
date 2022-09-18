@@ -126,8 +126,8 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="#"
-                        class="nav-link">
+                    <a href="{{route('ipo_application')}}"
+                        class="nav-link {{ request()->is('ipo_application') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-user text-orange pull-right"></i>
                         <p>
                             IPO Application
@@ -135,7 +135,7 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                    <a href="{{route('manage_bo_account')}}" class="nav-link {{ request()->is('manage_bo_account') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-table"></i>
                         <p>
                             B.O Accounts
@@ -143,7 +143,7 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                    <a href="{{route('manage_user_account')}}" class="nav-link {{ request()->is('manage_user_account') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-table"></i>
                         <p>
                             User Accounts

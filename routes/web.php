@@ -3,6 +3,9 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AdminController;
+//use App\Http\Controllers\WebController;
+//use App\Http\Controllers\Auth\RegisterController;
+//use App\Http\Controllers\Auth\ForgotPasswordController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,13 +19,30 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('my_mail','WebController@send_mail');
+
+Route::get('/clear-cache', function() {
+    $exitCode = Artisan::call('config:clear');
+    $exitCode = Artisan::call('cache:clear');
+    $exitCode = Artisan::call('config:cache');
+    return 'DONE'; //Return anything
+});
 
 Route::get('/',[LoginController::class,'loginForm'])->name('loginForm');
 Route::post('loginCheck', [LoginController::class,'loginCheck'])->name('loginCheck');
 Route::post('logout', [LoginController::class,'logout'])->name('logout');
+
+/************************ Password reset ****************************/
+Route::get('/password/reset','App\Http\Controllers\WebController@passwordReset')->name('passwordReset');
+Route::post('/password/send_reset_email','App\Http\Controllers\WebController@sendPasswordResetEmail');
+Route::get('/change-password/{id}','App\Http\Controllers\WebController@changePassword')->name('changePassword');
+Route::post('/save-new-password/{id}','App\Http\Controllers\WebController@saveNewPassword');
+////********************Reset password & register user**********************////
+Route::get('register/verify/{token}', 'App\Http\Controllers\Auth\RegisterController@verify');
+Route::get('register/reset-password/{token}', 'App\Http\Controllers\Auth\ForgotPasswordController@resetPassword');
+///***************************************pass Create*****************///
+Route::get('/passCreate/{id}', 'App\Http\Controllers\WebController@passwordCreate');
+Route::post('/create_user_password/{id}', 'App\Http\Controllers\WebController@createUserPassword');
 
 Route::middleware('admin')->group(function () {
     Route::get('/admin-dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
@@ -108,6 +128,26 @@ Route::middleware('admin')->group(function () {
     Route::any('/ipo_application',[AdminController::class,'ipo_application'])->name('ipo_application');
     Route::POST('/save_change_ipo_status',[AdminController::class,'save_change_ipo_status'])->name('save_change_ipo_status');
 
-/********************************************************************/
+   ///*************Manage bo Account***********************
+    Route::any('/manage_bo_account', [AdminController::class,'manage_bo_account'])->name('manage_bo_account');
+    Route::any('/edit_bo_account/{id}', [AdminController::class,'edit_bo_account'])->name('edit_bo_account');
+    ///*****************End Bo Account****************************///
+    ////*****************User Account*************************///
+    Route::any('/manage_user_account', [AdminController::class,'manage_user_account'])->name('manage_user_account');
+    Route::any('/edit_user/{id}', [AdminController::class,'edit_user'])->name('edit_user');
+    Route::get('ban_user/{id}', [AdminController::class,'ban_user']);
+    Route::get('unban_user/{id}', [AdminController::class,'unban_user']);
+    /********************* Send new Email for create Password *************/
+   Route::get('/send-new-email/{id}',[AdminController::class,'sendNewEmail']);
+  //////**************************Subscriber list********************************/////
+   Route::any('subscribers_list', [AdminController::class,'subscribers_list'])->name('subscribers_list');
 });
+
+Route::middleware('client')->group(function () {
+    Route::get('/client-dashboard', [App\Http\Controllers\Client\DashboardController::class, 'index'])->name('client.dashboard');
+});
+
+////***********************User & Client **************************////
+Route::post('user_registration', 'App\Http\Controllers\WebController@user_registration');
+Route::post('save_registration', 'App\Http\Controllers\WebController@save_registration');
     

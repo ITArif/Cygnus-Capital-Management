@@ -24,7 +24,7 @@ use App\Models\User;
 use App\Models\MAN;
 use App\Models\UserBOAccountData;
 use App\Models\UserBOAccountDataDemo;
-use App\Models\Mail\EmailVerification;
+use App\Mail\EmailVerification;
 use App\Models\Webcontent;
 use App\Models\MarketCommentry;
 use App\Models\EquityResearch;
@@ -146,7 +146,7 @@ class AdminController extends Controller
                 $accept_files = ["jpeg", "jpg", "png", "bmp", "gif"];
                 if(!in_array($ext, $accept_files)) {
                     return redirect()->route('about_company_profile')
-                    ->with('flash_msg', 'Invalid file extension. permitted file is .jpg, .jpeg & .png');
+                    ->with('success', 'Invalid file extension. permitted file is .jpg, .jpeg & .png');
                 }
                 // get the file
                 $upload = $request->file('upload_file');
@@ -168,7 +168,7 @@ class AdminController extends Controller
             $company_profile->save();
 
 
-            return redirect('about_company_profile')->with('flash_msg', 'Company profile updated successfully');
+            return redirect('about_company_profile')->with('success', 'Company profile updated successfully');
         }
 
         return view('admin.about_company_profile', $data);
@@ -195,7 +195,7 @@ class AdminController extends Controller
                 $accept_files = ["jpeg", "jpg", "png", "bmp", "gif"];
                 if(!in_array($ext, $accept_files)) {
                     return redirect()->route('about_board_of_director')
-                    ->with('flash_msg', 'Invalid file extension. permitted file is .jpg, .jpeg & .png');
+                    ->with('success', 'Invalid file extension. permitted file is .jpg, .jpeg & .png');
                 }
                 // get the file
                 $upload = $request->file('upload_file');
@@ -217,7 +217,7 @@ class AdminController extends Controller
             $board_of_director->save();
 
 
-            return redirect('about_board_of_director')->with('flash_msg', 'Data inserted successfully');
+            return redirect('about_board_of_director')->with('success', 'Data inserted successfully');
         }
 
         return view('admin.about_board_of_director', $data);
@@ -245,7 +245,7 @@ class AdminController extends Controller
                 $accept_files = ["jpeg", "jpg", "png", "bmp", "gif"];
                 if(!in_array($ext, $accept_files)) {
                     return redirect()->route('edit_director_profile_data')
-                    ->with('flash_msg', 'Invalid file extension. permitted file is .jpg, .jpeg & .png');
+                    ->with('success', 'Invalid file extension. permitted file is .jpg, .jpeg & .png');
                 }
                 // get the file
                 $upload = $request->file('upload_file');
@@ -269,7 +269,7 @@ class AdminController extends Controller
             $board_of_director->save();
 
 
-            return redirect('director_profile_data')->with('flash_msg', 'Data updated successfully');
+            return redirect('director_profile_data')->with('success', 'Data updated successfully');
         }
 
         return view('admin.edit_director_profile_data', $data);
@@ -310,7 +310,7 @@ class AdminController extends Controller
     // public function delete_product_and_service($id) {
     //     $id = $id;
     //     Product::where('id', $id)->delete();
-    //     return redirect('product_and_service')->with('flash_msg', 'Product deleted successfully');
+    //     return redirect('product_and_service')->with('success', 'Product deleted successfully');
     // }
 
     // public function create_product_and_service(Request $request) {
@@ -331,7 +331,7 @@ class AdminController extends Controller
     //             $accept_files = ["jpeg", "jpg", "png", "bmp", "gif"];
     //             if(!in_array($ext, $accept_files)) {
     //                 return redirect()->route('create_product_and_service')
-    //                 ->with('flash_msg', 'Invalid file extension. permitted file is .jpg, .jpeg & .png');
+    //                 ->with('success', 'Invalid file extension. permitted file is .jpg, .jpeg & .png');
     //             }
     //             // get the file
     //             $upload = $request->file('upload_file');
@@ -348,7 +348,7 @@ class AdminController extends Controller
     //         $products->save();
 
 
-    //         return redirect('product_and_service')->with('flash_msg', 'Data inserted successfully');
+    //         return redirect('product_and_service')->with('success', 'Data inserted successfully');
     //     }
 
     //     return view('admin/create_product_and_service', $data);
@@ -371,7 +371,7 @@ class AdminController extends Controller
     //             $accept_files = ["jpeg", "jpg", "png", "bmp", "gif"];
     //             if(!in_array($ext, $accept_files)) {
     //                 return redirect()->route('edit_product_and_service')
-    //                 ->with('flash_msg', 'Invalid file extension. permitted file is .jpg, .jpeg & .png');
+    //                 ->with('success', 'Invalid file extension. permitted file is .jpg, .jpeg & .png');
     //             }
     //             // get the file
     //             $upload = $request->file('upload_file');
@@ -389,7 +389,7 @@ class AdminController extends Controller
     //         $product->save();
 
 
-    //         return redirect('product_and_service')->with('flash_msg', 'Data updated successfully');
+    //         return redirect('product_and_service')->with('success', 'Data updated successfully');
     //     }
 
     //     return view('admin/edit_product_and_service', $data);
@@ -414,7 +414,7 @@ class AdminController extends Controller
         }
         // $id = $id;
         // Group::where('id', $id)->delete();
-        // return redirect('manage_group_account')->with('flash_msg', 'Group deleted successfully');
+        // return redirect('manage_group_account')->with('success', 'Group deleted successfully');
     }
 
     public function create_group_account(Request $request) {
@@ -443,7 +443,7 @@ class AdminController extends Controller
             $group->save();
 
             return redirect('manage_group_account')->with('success', 'Group created successfully');
-            //return redirect('manage_group_account')->with('flash_msg', 'Group created successfully');
+            //return redirect('manage_group_account')->with('success', 'Group created successfully');
         }
 
         return view('admin.group.create_group_account', compact('get_data','total_group_data'));
@@ -466,7 +466,7 @@ class AdminController extends Controller
             $group->save();
 
 
-            return redirect('manage_group_account')->with('flash_msg', 'Group updated successfully');
+            return redirect('manage_group_account')->with('success', 'Group updated successfully');
         }
 
         return view('admin.group.edit_group_account', $data);
@@ -496,7 +496,7 @@ class AdminController extends Controller
                 $accept_files = ["jpeg", "jpg", "png", "bmp", "gif"];
                 if(!in_array($ext, $accept_files)) {
                     return redirect()->route('about_management_profile')
-                    ->with('flash_msg', 'Invalid file extension. permitted file is .jpg, .jpeg & .png');
+                    ->with('success', 'Invalid file extension. permitted file is .jpg, .jpeg & .png');
                 }
                 // get the file
                 $upload = $request->file('upload_file');
@@ -518,7 +518,7 @@ class AdminController extends Controller
             $management_profile->save();
 
 
-            return redirect('about_management_profile')->with('flash_msg', 'Data inserted successfully');
+            return redirect('about_management_profile')->with('success', 'Data inserted successfully');
         }
 
         return view('admin.about_management_profile', $data);
@@ -1957,11 +1957,11 @@ class AdminController extends Controller
             return;
         }
         $data = [];
-        $action = Input::get('submit');
+        $action = $request->submit;
         $all_data = DB::select("SELECT id, (SELECT COUNT(*) FROM users WHERE role=1) AS TOT_USER, (SELECT COUNT(*) FROM users WHERE role=1 AND user_type='Free') AS FREE_USER, (SELECT COUNT(*) FROM users WHERE role=1 AND user_type='Premium') AS PREMIUM_USER, (SELECT COUNT(*) FROM users WHERE role=0) AS ADMIN_USER FROM users LIMIT 1");
-        $data['all_data'] = $all_data[0];
-        $data['get_data'] = UserBOAccountData::paginate(10);
-
+        $all_data = $all_data[0];
+        $get_data = UserBOAccountData::all();
+        //dd($get_data);
         if($action == "Submit") {
             $name = $request->name;
             $email = $request->email;
@@ -1973,33 +1973,32 @@ class AdminController extends Controller
             }
 
             if($name) {
-                $data['get_data'] = DB::select("SELECT * FROM user_bo_account_data WHERE bo_short_name LIKE '%{$name}%'");
+                $get_data = UserBOAccountData::where('bo_short_name', 'LIKE', '%'.$name.'%')->get();
             }
             else if($email) {
-                $data['get_data'] = DB::select("SELECT * FROM user_bo_account_data WHERE email_id='{$email}'");
+                $get_data = UserBOAccountData::where('email_id', '=', $email)->get();
             }
             else if($client_code) {
-                $data['get_data'] = DB::select("SELECT * FROM user_bo_account_data WHERE dp_internal_reference_number='{$client_code}'");
+                $get_data = UserBOAccountData::where('dp_internal_reference_number', '=', $client_code)->get();
             }
             else if($name && $email) {
-                $data['get_data'] = DB::select("SELECT * FROM user_bo_account_data WHERE bo_short_name LIKE '%{$name}%' AND email_id='{$email}'");
+                $get_data = UserBOAccountData::where('bo_short_name', 'LIKE', '%'.$name.'%' AND 'email_id', '=', $email)->get();
             }
             else if($name && $client_code) {
-                $data['get_data'] = DB::select("SELECT * FROM user_bo_account_data WHERE bo_short_name LIKE '%{$name}%' AND dp_internal_reference_number='{$client_code}'");
+                $get_data = UserBOAccountData::where('bo_short_name', 'LIKE', '%'.$name.'%' AND 'dp_internal_reference_number', '=', $client_code)->get();
             }
             else if($clientcode && $email) {
-                $data['get_data'] = DB::select("SELECT * FROM user_bo_account_data WHERE email='{$email}' AND dp_internal_reference_number='{$client_code}'");
+                 $get_data = UserBOAccountData::where('email_id', '=', $email AND 'dp_internal_reference_number', '=', $client_code)->get();
             }
             else if($name && $email && $client_code) {
-                $data['get_data'] = DB::select("SELECT * FROM user_bo_account_data WHERE bo_short_name LIKE '%{$name}%' AND dp_internal_reference_number='{$client_code}' AND  email='{$email}'");
+                $get_data = UserBOAccountData::where('bo_short_name', 'LIKE', '%'.$name.'%' AND 'dp_internal_reference_number', '=', $client_code AND 'email_id', '=', $email)->get();
             }
             // dd($data['get_data']);
         }
 
-        
-
-        $data['users'] = User::where('role', 1)->get();
-        return view('admin.manage_bo_account', $data);
+        //dd($get_data);
+        $users = User::where('role', 1)->get();
+        return view('admin.manage_bo_account', compact('users','get_data','all_data'));
     }
 
     public function view_bo_account($id) {
@@ -2354,7 +2353,7 @@ class AdminController extends Controller
                 $limits->save();
             }*/
 
-            return redirect('upload_client_limit')->with('flash_msg', 'Clients limit data uploaded successfully');
+            return redirect('upload_client_limit')->with('success', 'Clients limit data uploaded successfully');
         }
 
         return view('admin.upload_client_limit', $data);
@@ -2395,14 +2394,14 @@ class AdminController extends Controller
     public function delete_user($id) {
         $id = $id;
         User::where('id', $id)->delete();
-        return redirect('manage_user_account')->with('flash_msg', 'User deleted successfully');
+        return redirect('manage_user_account')->with('success', 'User deleted successfully');
     }
 
     public function edit_user(Request $request, $id) {
 
         $data = [];
         $data['get_data'] = User::where('id', $id)->first();
-        $action = Input::get('submit');
+        $action =$request->submit;
         if($action == "Update Profile") {
 
             $upload = $request->file('upload_file');
@@ -2446,7 +2445,7 @@ class AdminController extends Controller
             $edit_user->signature = ($upload2) ? $filename2 : $data['get_data']->signature;
             $edit_user->save();
 
-            return redirect('manage_user_account')->with('flash_msg', 'Profile updated successfully');
+            return redirect('manage_user_account')->with('success', 'Profile updated successfully');
         }
         return view('admin.edit_user', $data);
 
@@ -2456,14 +2455,14 @@ class AdminController extends Controller
         $x = User::find($id);
         $x->verified = 0;
         $x->save();
-        return redirect('manage_user_account')->with('flash_msg', 'Account banned successfully');
+        return redirect('manage_user_account')->with('success', 'Account banned successfully');
     }
 
     public function unban_user($id) {
         $x = User::find($id);
         $x->verified = 1;
         $x->save();
-        return redirect('manage_user_account')->with('flash_msg', 'Account activate successfully');
+        return redirect('manage_user_account')->with('success', 'Account activate successfully');
     }
 
     public function upload_batch_data(Request $request) {
@@ -3018,7 +3017,7 @@ class AdminController extends Controller
         curl_close($ch);
         $data = json_decode($data);
 
-        return redirect('home')->with('flash_msg', 'Process completed successfully');
+        return redirect('home')->with('success', 'Process completed successfully');
 
     }
     /********************* Send new Email for create Password *************/
@@ -3032,7 +3031,7 @@ class AdminController extends Controller
 
         // var_dump($user);
         \Mail::to($user->email)->send(new EmailVerification($user));
-        return redirect('/manage_user_account')->with('status','Send User new Verify email.');
+        return redirect('/manage_user_account')->with('success','Send User new Verify email.');
     }
    /**********************************************************************/
 
@@ -3166,10 +3165,10 @@ class AdminController extends Controller
     $data = $request->all();
     $insert = IPOSetting::create($data);
     if(!$insert) {
-        return redirect('ipo_setting')->with('flash_msg', 'OOPs! something is wrong, try again.');
+        return redirect('ipo_setting')->with('success', 'OOPs! something is wrong, try again.');
     }
 
-    return redirect('/IPO')->with('flash_msg', 'IPO new data Store successfully.');
+    return redirect('/IPO')->with('success', 'IPO new data Store successfully.');
   }
 
   public function ipoStatusChange(Request $request, $id)
@@ -3211,8 +3210,8 @@ class AdminController extends Controller
             ->update(['status' => $input_data['ipo_request_status']]);
     $get_data = IPOApplication::get();
         if($updated_data) {
-            return view('web/ipo_application',['data'=>$data,'get_data'=>$get_data])->with('flash_msg', 'IPO Request Status Update successfully.');
+            return view('web.ipo_application',['data'=>$data,'get_data'=>$get_data])->with('success', 'IPO Request Status Update successfully.');
         }
-        return view('web.ipo_application',['data'=>$data,'get_data'=>$get_data])->with('flash_msg', 'Please try again,IPO Request Status change unsuccessfull.');
+        return view('web.ipo_application',['data'=>$data,'get_data'=>$get_data])->with('failed', 'Please try again,IPO Request Status change unsuccessfull.');
   }
 }

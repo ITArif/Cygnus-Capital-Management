@@ -1,6 +1,7 @@
 <aside class="main-sidebar elevation-4 sidebar-light-teal">
-  <a href="#" class="brand-link">
-        <img src="{{ asset('images/logo.png') }}" alt="Logo" style="width: 240px; object-fit: cover;">
+  <a href="{{route('client.dashboard')}}" class="brand-link">
+        <img src="{{ asset('assets/logo/cygnus.png') }}" alt="Logo" style="width: 108px; height: 100px; object-fit: cover;object-position: center;margin-left: 58px;
+        ">
   </a>
   <!-- Sidebar -->
     <!-- Sidebar user panel (optional) -->

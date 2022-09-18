@@ -17,6 +17,10 @@ return [
         'guard' => 'web',
         'passwords' => 'users',
     ],
+    'kiosks' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Kiosk::class,
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -39,6 +43,15 @@ return [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
+        ],
+        'api' => [
+            'driver' => 'token',
+            'provider' => 'users',
+        ],
+
+        'kiosk' => [
+            'driver' => 'session',
+            'provider' => 'kiosks',
         ],
     ],
 
@@ -63,6 +76,10 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+        'kiosks' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Kiosk::class,
         ],
 
         // 'users' => [
@@ -92,6 +109,11 @@ return [
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,
+        ],
+        'kiosks' => [
+            'provider' => 'kiosks',
+            'table' => 'password_resets',
+            'expire' => 15,
         ],
     ],
 

@@ -8,6 +8,7 @@
 </script>
 <!-- Bootstrap 4 -->
 <script src="{{asset('assets/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+<script src="{{asset('assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js')}}"></script>
 <!-- ChartJS -->
 <script src="{{asset('assets/plugins/chart.js/Chart.min.js')}}"></script>
 <!-- Sparkline -->

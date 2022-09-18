@@ -38,23 +38,17 @@ class LoginController extends Controller
                     'status' =>$auth->status,
                     'client_code' =>$auth->client_code,
                 ]);
+
                 //dd($auth->role);
-                if ($auth->role == 2) {
-                    if ($auth->status == 1) {
+                if ($auth->password_create_status == 1) {
+                    if ($auth->role == 2) {
                         //dd("status ok");
                         return redirect('/admin-dashboard');
-                    }else{
-                        return redirect('/')->with('error', 'Your are not active.');
-                    }
-
-                } elseif ($auth->role == 1) {
-                    if ($auth->status == 1) {
-                        return redirect('/customer-dashboard');
-                    } else {
-                        return redirect('/')->with('error', 'Your are not active.');
+                    }elseif($auth->role == 1){
+                        return redirect('/client-dashboard');
                     }
                 } else {
-                    return redirect('/');
+                    return redirect('/')->with('failed','Please create your password.');
                 }
             } else {
                 return redirect('/')
